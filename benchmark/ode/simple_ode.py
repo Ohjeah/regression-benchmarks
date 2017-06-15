@@ -47,3 +47,26 @@ def michaelis_menten(vmax=0.25, Km=0.1, rho=1.0):
         ds = -dp
         return [ds, dp]
     return dy
+
+
+def rössler(a=0.15, b=0.20, c=10.0):
+    @functools.wraps(rössler)
+    def dy_(state, t):
+        x, y, z = state
+        dx = -y - z
+        dy = x + a*y
+        dz = b + (x - c) * z
+        return [dx, dy, dz]
+    return dy_
+
+
+def brusselator(a=1.0, b=3.0):
+    @functools.wraps(brusselator)
+    def dy_(state):
+        x, y = state
+        dx = a + x**2 * y - (b+1) * x
+        dy = b*x - x**2 * y
+        return dx, dy
+    return dy_
+
+
