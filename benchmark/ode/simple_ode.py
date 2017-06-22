@@ -1,5 +1,7 @@
 import functools
 
+import numpy as np
+
 
 def harmonic_oscillator(omega=1.0):
     @functools.wraps(harmonic_oscillator)
@@ -62,7 +64,7 @@ def rössler(a=0.15, b=0.20, c=10.0):
 
 def brusselator(a=1.0, b=3.0):
     @functools.wraps(brusselator)
-    def dy_(state):
+    def dy_(state, t):
         x, y = state
         dx = a + x**2 * y - (b+1) * x
         dy = b*x - x**2 * y
@@ -70,3 +72,52 @@ def brusselator(a=1.0, b=3.0):
     return dy_
 
 
+def magnets(K=0.25):
+    @functools.wraps(magnets)
+    def dy(state, t):
+        theta1, theta2 = state
+        dtheta1 = K*np.sin(theta1 - theta2) - np.sin(theta1)
+        dtheta2 = K*np.sin(theta2 - theta1) - np.sin(theta2)
+        return dtheta1, dtheta2
+    return dy
+
+
+def predator_prey(a=0.5, b=0.5):
+    @functools.wraps(predator_prey)
+    def dy_(state, t):
+        x, y = state
+        dx = x*(b - x - y / (1.0 + x))
+        dy = y*(x / (1 + x) - a * y)
+        return dx, dy
+    return dy_
+
+
+def bacterial_respiration(a=0.1, b=0.2, q=1.0):
+    @functools.wraps(bacterial_respiration)
+    def dy_(state, t):
+        x, y = state
+        temp =  x*y / (1 + q * x**2)
+        dx = b - x - temp
+        dy = a - temp
+        return dx, dy
+    return dy_
+
+
+def glider(d=1.0):
+    @functools.wraps(glider)
+    def dy(state, t):
+        v, theta = state
+        dv = -np.sin(theta) - d*v**2
+        dtheta = - np.cos(theta)/v + v
+        return dv, dtheta
+    return dy
+
+
+def shear_flow(a=0.3):
+    @functools.wraps(shear_flow)
+    def dy(state, t):
+        theta, phi = state
+        dtheta = np.tan(phi)**(-1) * np.cos(theta)
+        dphi = (np.cos(phi)**2 + a * np.sin(phi)**2) * np.sin(theta)
+        return dtheta, dphi
+    return dy
