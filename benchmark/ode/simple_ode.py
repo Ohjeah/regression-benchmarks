@@ -1,6 +1,11 @@
+import sys
+import inspect
 import functools
 
+from sklearn.datasets.base import Bunch
 import numpy as np
+
+from benchmark.ode.integrate import generate_data
 
 
 def harmonic_oscillator(omega=1.0):
@@ -121,3 +126,34 @@ def shear_flow(a=0.3):
         dphi = (np.cos(phi)**2 + a * np.sin(phi)**2) * np.sin(theta)
         return dtheta, dphi
     return dy
+
+
+def make_bunch(data_config):
+    x, dx = generate_data(**data_config)
+    default_params = {p.name: p.default for p in inspect.signature(data_config["problem"]).parameters.values()}
+    return Bunch(data=x, target=dx, x0=data_config["x0"], params=data_config.get("params", default_params), t=data_config["t"])
+
+
+def load_lorenz():
+    t = np.linspace(0, 10, 10001, endpoint=True)
+    x0 = [-8., 4., 27.]
+
+    sigma = 10.
+    rho = 28.
+    beta = 8. / 3.
+    params = dict(s=sigma, r=rho, b=beta)
+
+    data_config = dict(problem=lorenz, x0=x0, t=t, params=params)
+    return make_bunch(data_config)
+
+
+def load_van_der_pol():
+    t = np.linspace(0, 10, 10001, endpoint=True)
+    x0 = [0, 1]
+    data_config = dict(problem=van_der_pol, x0=x0, t=t)
+    return make_bunch(data_config)
+
+
+current_module = sys.modules[__name__]
+token = "load_"
+all_loaders = {name.split(token)[1]: getattr(current_module, name) for name in locals() if token in name}

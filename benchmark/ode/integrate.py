@@ -22,7 +22,7 @@ def derivative(x, dt=1.0):
     return dx
 
 
-def generate_data(problem, x0, t, **params):
+def generate_data(problem, x0, t, params):
     dy = problem(**params)
     x = scipy.integrate.odeint(dy, x0, t)
     dt = t[1] - t[0]
