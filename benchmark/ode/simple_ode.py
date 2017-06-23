@@ -42,7 +42,7 @@ def van_der_pol(omega=1.0, a=0.1, b=0.01):
         y0, y1 = y
         dy0 = y1
         dy1 = - omega**2 * y0 + a * y1 * (1 - b * y0**2)
-        [dy0, dy1]
+        return dy0, dy1
     return dy
 
 
