@@ -129,9 +129,9 @@ def shear_flow(a=0.3):
 
 
 def make_bunch(data_config):
-    data_config["params"] = data_config.get("params", default_params)
+    default_params = lambda :{p.name: p.default for p in inspect.signature(data_config["problem"]).parameters.values()}
+    data_config["params"] = data_config.get("params", default_params())
     x, dx = generate_data(**data_config)
-    default_params = {p.name: p.default for p in inspect.signature(data_config["problem"]).parameters.values()}
     return Bunch(data=x, target=dx, x0=data_config["x0"], params=data_config["params"], t=data_config["t"])
 
 
