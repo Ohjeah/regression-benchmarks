@@ -155,6 +155,13 @@ def load_van_der_pol():
     return make_bunch(data_config)
 
 
+def load_shear_flow():
+    t = np.linspace(0, 10, 10001, endpoint=True)
+    x0 = [1, 1]
+    data_config = dict(problem=shear_flow, x0=x0, t=t)
+    return make_bunch(data_config)
+
+
 current_module = sys.modules[__name__]
 token = "load_"
 all_loaders = {name.split(token)[1]: getattr(current_module, name) for name in locals() if token in name}
