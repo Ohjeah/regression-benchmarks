@@ -3,7 +3,7 @@ import inspect
 import collections
 from itertools import repeat
 from functools import partial
-from inspect import getframeinfo, getmoduleinfo, stack
+from inspect import getframeinfo, getmodulename, stack
 
 import toolz
 import numpy as np
@@ -70,8 +70,7 @@ def generate_evenly_spaced_data_set(testfunction, step_sizes, ranges):
 
 def generator_from_helper(helper, shift=0, i=()):
     caller = getframeinfo(stack()[1][0])         # find current_module by looking up caller in stack
-    moduleinfo = getmoduleinfo(caller.filename)
-    name = moduleinfo.name
+    name = getmodulename(caller.filename)
     current_module = [mod for mname, mod in sys.modules.items() if name == mname.split('.')[-1]][0]
     context = dir(current_module)
     for f, fname in ((getattr(current_module, func), func) for func in context if '{}_func'.format(name) in func):
