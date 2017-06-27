@@ -8,6 +8,16 @@ import numpy as np
 from benchmark.ode.integrate import generate_data
 
 
+all_problems = {}
+
+def register_ode(arity, *tags):
+    def inner(func):
+        all_problems[func] = {"arity": arity, "tags": tags, "name": func.__name__}
+        return func
+    return inner
+
+
+@register_ode(2)
 def harmonic_oscillator(omega=1.0):
     @functools.wraps(harmonic_oscillator)
     def dy(y, t):
@@ -17,6 +27,7 @@ def harmonic_oscillator(omega=1.0):
     return dy
 
 
+@register_ode(2)
 def anharmonic_oscillator(omega=1.0, c=1.0, l=1.0):
     @functools.wraps(anharmonic_oscillator)
     def dy(y, t):
@@ -26,6 +37,7 @@ def anharmonic_oscillator(omega=1.0, c=1.0, l=1.0):
     return dy
 
 
+@register_ode(3)
 def lorenz(s=10.0, r=28.0, b=8.0/3.0):
     @functools.wraps(lorenz)
     def dy(y, t):
@@ -36,6 +48,7 @@ def lorenz(s=10.0, r=28.0, b=8.0/3.0):
     return dy
 
 
+@register_ode(2)
 def van_der_pol(omega=1.0, a=0.1, b=0.01):
     @functools.wraps(van_der_pol)
     def dy(y, t):
@@ -46,6 +59,7 @@ def van_der_pol(omega=1.0, a=0.1, b=0.01):
     return dy
 
 
+@register_ode(2)
 def michaelis_menten(vmax=0.25, Km=0.1, rho=1.0):
     @functools.wraps(michaelis_menten)
     def dy(y, t):
@@ -56,6 +70,7 @@ def michaelis_menten(vmax=0.25, Km=0.1, rho=1.0):
     return dy
 
 
+@register_ode(3)
 def rössler(a=0.15, b=0.20, c=10.0):
     @functools.wraps(rössler)
     def dy_(state, t):
@@ -67,6 +82,7 @@ def rössler(a=0.15, b=0.20, c=10.0):
     return dy_
 
 
+@register_ode(2)
 def brusselator(a=1.0, b=3.0):
     @functools.wraps(brusselator)
     def dy_(state, t):
@@ -77,6 +93,7 @@ def brusselator(a=1.0, b=3.0):
     return dy_
 
 
+@register_ode(2)
 def magnets(K=0.25):
     @functools.wraps(magnets)
     def dy(state, t):
@@ -87,6 +104,7 @@ def magnets(K=0.25):
     return dy
 
 
+@register_ode(2)
 def predator_prey(a=0.5, b=0.5):
     @functools.wraps(predator_prey)
     def dy_(state, t):
@@ -97,6 +115,7 @@ def predator_prey(a=0.5, b=0.5):
     return dy_
 
 
+@register_ode(2)
 def bacterial_respiration(a=0.1, b=0.2, q=1.0):
     @functools.wraps(bacterial_respiration)
     def dy_(state, t):
@@ -108,6 +127,7 @@ def bacterial_respiration(a=0.1, b=0.2, q=1.0):
     return dy_
 
 
+@register_ode(2)
 def glider(d=1.0):
     @functools.wraps(glider)
     def dy(state, t):
@@ -117,7 +137,7 @@ def glider(d=1.0):
         return dv, dtheta
     return dy
 
-
+@register_ode(2)
 def shear_flow(a=0.3):
     @functools.wraps(shear_flow)
     def dy(state, t):
@@ -135,33 +155,24 @@ def make_bunch(data_config):
     return Bunch(data=x, target=dx, x0=data_config["x0"], params=data_config["params"], t=data_config["t"])
 
 
-def load_lorenz():
-    t = np.linspace(0, 10, 10001, endpoint=True)
-    x0 = [-8., 4., 27.]
+def make_load(ode, t=np.linspace(0, 10, 10001, endpoint=True), x0=1):
+    arity = all_problems[ode]["arity"]
+    data_config = dict(problem=ode, x0=np.ones(arity)*x0, t=t)
 
-    sigma = 10.
-    rho = 28.
-    beta = 8. / 3.
-    params = dict(s=sigma, r=rho, b=beta)
+    def loader():
+        return make_bunch(data_config)
 
-    data_config = dict(problem=lorenz, x0=x0, t=t, params=params)
-    return make_bunch(data_config)
+    loader.__name__ = "load_" + all_problems[ode]["name"]
 
-
-def load_van_der_pol():
-    t = np.linspace(0, 10, 10001, endpoint=True)
-    x0 = [0, 1]
-    data_config = dict(problem=van_der_pol, x0=x0, t=t)
-    return make_bunch(data_config)
-
-
-def load_shear_flow():
-    t = np.linspace(0, 10, 10001, endpoint=True)
-    x0 = [1, 1]
-    data_config = dict(problem=shear_flow, x0=x0, t=t)
-    return make_bunch(data_config)
+    # register loader to the simple_ode module
+    caller = inspect.getframeinfo(inspect. stack()[1][0])         # find current_module by looking up caller in stack
+    moduleinfo = inspect.getmoduleinfo(caller.filename)
+    name = moduleinfo.name
+    current_module = [mod for mname, mod in sys.modules.items() if name == mname.split('.')[-1]][0]
+    if loader.__name__ not in dir(current_module):
+        setattr(current_module, loader.__name__, loader)
+    
+    return loader
 
 
-current_module = sys.modules[__name__]
-token = "load_"
-all_loaders = {name.split(token)[1]: getattr(current_module, name) for name in locals() if token in name}
+all_loaders = {all_problems[ode]["name"]: make_load(ode) for ode in all_problems}
