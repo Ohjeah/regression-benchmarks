@@ -5,16 +5,12 @@ import functools
 from sklearn.datasets.base import Bunch
 import numpy as np
 
-from benchmark.ode.integrate import generate_data
+from .integrate import generate_ode_data
+from ..utils import make_register
 
 
-all_problems = {}
-
-def register_ode(arity, *tags):
-    def inner(func):
-        all_problems[func] = {"arity": arity, "tags": tags, "name": func.__name__}
-        return func
-    return inner
+all_ode = {}
+register_ode = make_register(all_ode)
 
 
 @register_ode(2, "linear", "polynomial")
@@ -151,18 +147,18 @@ def shear_flow(a=0.3):
 def make_bunch(data_config):
     default_params = lambda :{p.name: p.default for p in inspect.signature(data_config["problem"]).parameters.values()}
     data_config["params"] = data_config.get("params", default_params())
-    x, dx = generate_data(**data_config)
+    x, dx = generate_ode_data(**data_config)
     return Bunch(data=x, target=dx, x0=data_config["x0"], params=data_config["params"], t=data_config["t"])
 
 
 def make_load(ode, t=np.linspace(0, 10, 10001, endpoint=True), x0=1):
-    arity = all_problems[ode]["arity"]
+    arity = all_ode[ode]["arity"]
     data_config = dict(problem=ode, x0=np.ones(arity)*x0, t=t)
 
     def loader():
         return make_bunch(data_config)
 
-    loader.__name__ = "load_" + all_problems[ode]["name"]
+    loader.__name__ = "load_" + all_ode[ode]["name"]
 
     # register loader to the simple_ode module
     caller = inspect.getframeinfo(inspect. stack()[1][0])         # find current_module by looking up caller in stack
@@ -170,8 +166,8 @@ def make_load(ode, t=np.linspace(0, 10, 10001, endpoint=True), x0=1):
     current_module = [mod for mname, mod in sys.modules.items() if name == mname.split('.')[-1]][0]
     if loader.__name__ not in dir(current_module):
         setattr(current_module, loader.__name__, loader)
-    
+
     return loader
 
 
-all_loaders = {all_problems[ode]["name"]: make_load(ode) for ode in all_problems}
+all_loaders = {all_ode[ode]["name"]: make_load(ode) for ode in all_ode}

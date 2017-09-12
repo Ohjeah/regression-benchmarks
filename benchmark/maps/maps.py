@@ -2,7 +2,13 @@ import functools
 
 import numpy as np
 
+from ..utils import make_register
 
+
+all_maps = {}
+register_map = make_register(all_maps)
+
+@register_map(2, "polynomial")
 def henon(a=1.4, b=0.3):
     @functools.wraps(henon)
     def f(state):
@@ -11,6 +17,7 @@ def henon(a=1.4, b=0.3):
     return f
 
 
+@register_map(2)
 def chirikov(K=1):
     @functools.wraps(chirikov)
     def f(state):
@@ -21,6 +28,7 @@ def chirikov(K=1):
     return f
 
 
+@register_map(1, "polynomial")
 def logistic(r=3.18):
     @functools.wraps(logistic)
     def f(x):
@@ -28,6 +36,7 @@ def logistic(r=3.18):
     return f
 
 
+@register_map(2, "polynomial")
 def bogdanov(eps, k , mu):
     @functools.wraps(bogdanov)
     def f(state):
@@ -35,6 +44,7 @@ def bogdanov(eps, k , mu):
         return x + y, (1 + eps)*y + k*x*(x - 1) + mu*x*y
 
 
+@register_map(2, "polynomial")
 def duffing(a=2.75, b=0.15):
     @functools.wraps(duffing)
     def f(state):
@@ -43,6 +53,7 @@ def duffing(a=2.75, b=0.15):
     return f
 
 
+@register_map(2, "polynomial")
 def tinkerbell(a=0.9, b=-0.6013, c=2.0, d=0.5):
     @functools.wraps(tinkerbell)
     def f(state):
