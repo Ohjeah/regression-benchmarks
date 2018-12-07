@@ -1,5 +1,6 @@
 import numpy as np
-from toolz.itertoolz import iterate, take
+from toolz.itertoolz import iterate
+from toolz.itertoolz import take
 
 from .maps import all_maps
 

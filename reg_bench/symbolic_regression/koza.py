@@ -12,11 +12,11 @@ koza_func1 = partial(poly, i=4)
 
 
 def koza_func2(x):
-    return x**5 - 2.0*x**3 + x
+    return x ** 5 - 2.0 * x ** 3 + x
 
 
 def koza_func3(x):
-    return x**6 - 2.0*x**4 + x**2
+    return x ** 6 - 2.0 * x ** 4 + x ** 2
 
 
 def _koza_helper(func, rng=np.random):
@@ -27,4 +27,4 @@ def _koza_helper(func, rng=np.random):
 
 generator_from_helper(_koza_helper)
 current_module = sys.modules[__name__]
-all_problems = {name: getattr(current_module, name) for name in locals() if 'generate_koza' in name}
+all_problems = {name: getattr(current_module, name) for name in locals() if "generate_koza" in name}

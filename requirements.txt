@@ -1,4 +1,0 @@
-numpy
-toolz
-pyodesys
-scikit-learn[alldeps]

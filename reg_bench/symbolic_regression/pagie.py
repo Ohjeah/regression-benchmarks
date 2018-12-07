@@ -2,7 +2,7 @@ from .util import generate_evenly_spaced_data_set
 
 
 def pagie_func1(x, y):
-    return 1.0 / x**(-4) + 1.0 / y**(-4)
+    return 1.0 / x ** (-4) + 1.0 / y ** (-4)
 
 
 def generate_pagie1():

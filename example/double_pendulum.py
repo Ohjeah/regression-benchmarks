@@ -1,15 +1,15 @@
+import matplotlib.pyplot as plt
 import numpy as np
 from scipy.integrate import odeint
-import matplotlib.pyplot as plt
 
-import benchmark.ode
+import reg_bench.ode
 
 
-dblpdl = benchmark.ode.double_pendulum()
+dblpdl = reg_bench.ode.double_pendulum()
 
 dy = dblpdl()
 y0 = dblpdl.initial_conditions()
-t = np.linspace(0, 10, 5*10**3)
+t = np.linspace(0, 10, 5 * 10 ** 3)
 
 print(y0)
 
