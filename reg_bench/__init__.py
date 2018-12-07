@@ -1,3 +1,4 @@
+from .__version__ import __version__
 from .maps import all_maps
 from .ode import all_ode
 
