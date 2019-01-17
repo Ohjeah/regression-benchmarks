@@ -1,10 +1,10 @@
 language: python
+dist: xenial
 cache:
   pip: true
   directories:
     - "$HOME/.cache/pypoetry"
 python:
-  - "3.6"
   - "3.7"
 install:
   - pip install poetry && poetry install
