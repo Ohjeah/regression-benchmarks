@@ -1,7 +1,6 @@
 from functools import partial
 
 import numpy as np
-import scipy as sp
 from finitediff import interpolate_by_finite_diff as ifd
 from scipy import sparse
 from scipy.sparse import linalg as splin

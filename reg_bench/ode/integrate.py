@@ -46,7 +46,7 @@ def generate_ode_data(
         noise_params=noise_params,
         noise_kind=noise_kind,
     )
-    dx = diff(t, x, kind="tvregdiff", **(diff_params or {}))
+    dx = diff(t, x, **(diff_params or {}))
     return x, dx
 
 
