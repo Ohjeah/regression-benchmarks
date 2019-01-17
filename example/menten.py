@@ -5,10 +5,15 @@ from scipy.integrate import odeint
 import reg_bench.ode
 
 
-dy = reg_bench.ode.simple_ode.michaelis_menten(rho=1.3)
-t = np.linspace(0, 10, 5 * 10 ** 5)
+t = np.linspace(0, 10, 5 * 10 ** 2)
 x0 = [1, 0]
-s = odeint(dy, x0, t)
-plt.plot(t, s)
 
+
+noise = 0.01
+
+x, dx = reg_bench.ode.generate_ode_data(
+    reg_bench.ode.michaelis_menten, x0, t, noise_amplitude=noise, ode_params=dict(rho=1.3)
+)
+
+plt.plot(t, x)
 plt.show()

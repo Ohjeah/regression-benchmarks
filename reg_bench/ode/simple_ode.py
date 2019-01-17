@@ -161,12 +161,12 @@ def make_bunch(data_config):
     default_params = lambda: {
         p.name: p.default for p in inspect.signature(data_config["problem"]).parameters.values()
     }
-    data_config["params"] = data_config.get("params", default_params())
+    data_config["ode_params"] = data_config.get("ode_params", default_params())
     x, dx = generate_ode_data(**data_config)
-    return Bunch(data=x, target=dx, x0=data_config["x0"], params=data_config["params"], t=data_config["t"])
+    return Bunch(data=x, target=dx, x0=data_config["x0"], params=data_config["ode_params"], t=data_config["t"])
 
 
-def make_load(ode, t=np.linspace(0, 10, 10001, endpoint=True), x0=1):
+def make_load(ode, t=np.linspace(0, 100, 10001, endpoint=True), x0=1):
     arity = all_ode[ode]["arity"]
     data_config = dict(problem=ode, x0=np.ones(arity) * x0, t=t)
 
