@@ -5,8 +5,9 @@ cache:
     - "$HOME/.cache/pypoetry"
 python:
   - "3.6"
+  - "3.7"
 install:
-  - pip install peotry && poetry install
+  - pip install poetry && poetry install
 script:
   - poetry run py.test tests
 after_success:
