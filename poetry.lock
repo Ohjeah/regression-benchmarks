@@ -81,22 +81,23 @@ version = "0.5.0"
 
 [[package]]
 category = "main"
+description = ""
+name = "derivative"
+optional = false
+python-versions = ">=3.7,<4.0"
+version = "0.1.2"
+
+[package.dependencies]
+numpy = ">=1.16,<2.0"
+scipy = ">=1.2,<2.0"
+
+[[package]]
+category = "main"
 description = "Discover and load entry points from installed packages."
 name = "entrypoints"
 optional = false
 python-versions = ">=2.7"
 version = "0.3"
-
-[[package]]
-category = "main"
-description = "Finite difference weights for any derivative order on arbitrarily spaced grids."
-name = "finitediff"
-optional = false
-python-versions = "*"
-version = "0.6.2"
-
-[package.dependencies]
-numpy = "*"
 
 [[package]]
 category = "main"
@@ -687,7 +688,7 @@ version = "3.4.2"
 notebook = ">=4.4.1"
 
 [metadata]
-content-hash = "9cd22b5f736a477c6ee845a9e98ca7de5596f07ca2df493b52393b73d41a65ee"
+content-hash = "fc3dbf1eeb5fd614602a4bb0ff5d7768995e3d59f9cea912fbfb1e6fc05e912a"
 python-versions = "^3.7"
 
 [metadata.hashes]
@@ -700,8 +701,8 @@ colorama = ["05eed71e2e327246ad6b38c540c4a3117230b19679b875190486ddd2d721422d", 
 cycler = ["1d8a5ae1ff6c5cf9b93e8811e581232ad8920aeec647c37316ceac982b08cb2d", "cd7b2d1018258d7247a71425e9f26463dfb444d411c39569972f4ce586b0c9d8"]
 decorator = ["2c51dff8ef3c447388fe5e4453d24a2bf128d3a4c32af3fabef1f01c6851ab82", "c39efa13fbdeb4506c476c9b3babf6a718da943dab7811c206005a4a956c080c"]
 defusedxml = ["24d7f2f94f7f3cb6061acb215685e5125fbcdc40a857eff9de22518820b0a4f4", "702a91ade2968a82beb0db1e0766a6a273f33d4616a6ce8cde475d8e09853b20"]
+derivative = ["4b37fe3f9b241d8098728c143e6232a03dd9150330bbc46ef5e5051711a6067f", "591e6718d52aa7864d398e373596b304f52e505b5bdd0d6af52e41a8d47efcf4"]
 entrypoints = ["589f874b313739ad35be6e0cd7efde2a4e9b6fea91edcc34e58ecbb8dbe56d19", "c70dd71abe5a8c85e55e12c19bd91ccfeec11a6e99044204511f9ed547d48451"]
-finitediff = ["c0ac3607c9f5211d6e9125f1a300422f85b3a898cb5d3c62185ec94affac2ab0"]
 ipykernel = ["0aeb7ec277ac42cc2b59ae3d08b10909b2ec161dc6908096210527162b53675d", "0fc0bf97920d454102168ec2008620066878848fcfca06c22b669696212e292f"]
 ipython = ["6a9496209b76463f1dec126ab928919aaf1f55b38beb9219af3fe202f6bbdd12", "f69932b1e806b38a7818d9a1e918e5821b685715040b48e59c657b3c7961b742"]
 ipython-genutils = ["72dd37233799e619666c9f639a9da83c34013a73e8bbc79a7a6348d93c61fab8", "eb2e116e75ecef9d4d228fdc66af54269afa26ab4463042e33785b887c628ba8"]

@@ -13,8 +13,7 @@ numpy = "^1.15"
 toolz = "^0.9.0"
 pyodesys = "^0.12.4"
 scikit-learn = {version = "^0.20.1",extras = ["alldeps"]}
-finitediff = "^0.6.2"
-scipy = "^1.2"
+derivative = "^0.1.2"
 
 [tool.poetry.dev-dependencies]
 matplotlib = "^3.0"

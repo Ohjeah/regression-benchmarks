@@ -2,8 +2,7 @@ from functools import wraps
 
 import numpy as np
 import scipy.integrate
-
-from .differentiate import diff
+from derivative import derivative
 
 
 def generate_ode_data(
@@ -46,7 +45,7 @@ def generate_ode_data(
         noise_params=noise_params,
         noise_kind=noise_kind,
     )
-    dx = diff(t, x, **(diff_params or {}))
+    dx = derivative(t, x, kind="cubic_spline", **(diff_params or {}))
     return x, dx
 
 
