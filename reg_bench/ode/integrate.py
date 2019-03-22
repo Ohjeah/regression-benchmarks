@@ -45,7 +45,7 @@ def generate_ode_data(
         noise_params=noise_params,
         noise_kind=noise_kind,
     )
-    dx = derivative(t, x, kind="cubic_spline", **(diff_params or {}))
+    dx = derivative(t, x, **(diff_params or {}))
     return x, dx
 
 
