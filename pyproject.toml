@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "reg-bench"
-version = "0.0.3-dev"
+version = "0.0.3"
 description = ""
 readme = "README.md"
 authors = ["Markus Quade <info@markusqua.de>"]
